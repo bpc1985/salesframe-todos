@@ -1,0 +1,19 @@
+.container {
+  background: #209cee;
+  padding: 30px;
+  height: 100vh;
+}
+
+.todoApp {
+  background: #e8e8e8;
+  border-radius: 4px;
+  padding: 5px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}

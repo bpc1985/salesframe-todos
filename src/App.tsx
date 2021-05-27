@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
-function App() {
+import Filter from "components/Filter";
+import Input from "components/Input";
+import TodoList from "components/TodoList";
+
+import { loadTodos } from "redux/actions";
+import { loadApiTodos } from "api/api";
+import { TodoModel } from "types/types";
+
+import "./App.scss";
+
+const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const data: TodoModel[] = await loadApiTodos();
+      dispatch(loadTodos(data));
+    };
+    loadData();
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="todoApp">
+        <div className="filter">
+          <Input />
+          <Filter />
+        </div>
+        <TodoList />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
