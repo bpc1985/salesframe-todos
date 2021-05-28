@@ -1,6 +1,7 @@
-import { useState, useCallback } from "react";
+import { FC, useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { editTodo } from "redux/actions";
+import { updateApiTodo, deleteApiTodo } from "api/api";
 
 import "./TodoItem.scss";
 import "./Input.scss";
@@ -8,15 +9,15 @@ import "./Input.scss";
 export interface ITodoItem {
   id: string;
   text: string;
-  complete: boolean;
+  completed: boolean;
   onToggleClick: (id: string) => void;
   onDeleteClick: (id: string) => void;
 }
 
-export const TodoItem = ({
+export const TodoItem: FC<ITodoItem> = ({
   id,
   text,
-  complete,
+  completed,
   onToggleClick,
   onDeleteClick,
 }: ITodoItem) => {
@@ -30,11 +31,12 @@ export const TodoItem = ({
     [dispatch, id]
   );
 
-  const handleKeyDown = (
+  const updateTodoHandler = async (
     e: React.KeyboardEvent<HTMLInputElement> & { target: HTMLInputElement }
   ) => {
     if (e.key === "Enter") {
       if (newText && newText.trim().length > 0) {
+        await updateApiTodo({ id, text: newText, completed });
         onEditItem(newText);
       } else {
         setNewText(text);
@@ -43,25 +45,35 @@ export const TodoItem = ({
     }
   };
 
+  const toggleTodoHandler = async (id: string) => {
+    await updateApiTodo({ id, text, completed: !completed });
+    onToggleClick(id);
+  };
+
+  const deleteTodoHandler = async (id: string) => {
+    await deleteApiTodo(id);
+    onDeleteClick(id);
+  };
+
   return (
     <div className="todo">
       {!isEdit && (
         <>
           <div
             className="ml-2"
-            style={{ textDecoration: complete ? "line-through" : "none" }}
-            onClick={() => onToggleClick(id)}
+            style={{ textDecoration: completed ? "line-through" : "none" }}
+            onClick={() => toggleTodoHandler(id)}
           >
             {newText}
           </div>
           <div>
-            <button className="button" onClick={() => onToggleClick(id)}>
-              {complete ? "Undo" : "Done"}
+            <button className="button" onClick={() => toggleTodoHandler(id)}>
+              {completed ? "Undo" : "Done"}
             </button>
             <button className="button" onClick={() => setIsEdit(true)}>
               Edit
             </button>
-            <button className="button" onClick={() => onDeleteClick(id)}>
+            <button className="button" onClick={() => deleteTodoHandler(id)}>
               Delete
             </button>
           </div>
@@ -74,7 +86,7 @@ export const TodoItem = ({
           className="input"
           value={newText}
           onChange={(e) => setNewText(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={updateTodoHandler}
         />
       )}
     </div>

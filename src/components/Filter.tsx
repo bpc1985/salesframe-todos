@@ -1,10 +1,10 @@
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { FILTER_ACTIVE, FILTER_ALL, FILTER_COMPLETE } from "redux/constants";
 import { setFilter } from "redux/actions";
 
-const Filter = () => {
+const Filter: FC = () => {
   const dispatch = useDispatch();
 
   const onSetFilter = useCallback(

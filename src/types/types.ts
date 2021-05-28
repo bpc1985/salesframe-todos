@@ -22,7 +22,7 @@ export interface LoadTodosAction {
 
 export interface AddTodoAction {
   type: typeof ADD_TODO;
-  nextId: string;
+  id: string;
   value: string;
 }
 

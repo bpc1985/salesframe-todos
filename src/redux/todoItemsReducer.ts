@@ -21,7 +21,7 @@ const todoItems = (
     case ADD_TODO:
       return [
         ...state,
-        { id: action.nextId, text: action.value, completed: false },
+        { id: action.id, text: action.value, completed: false },
       ];
 
     case EDIT_TODO:

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { FILTER_ALL, FILTER_ACTIVE, FILTER_COMPLETE } from "redux/constants";
@@ -23,7 +23,7 @@ const getVisibleTodos = (todos: TodoModel[], filter: string): TodoModel[] => {
   }
 };
 
-const ToDoList = () => {
+const ToDoList: FC = () => {
   const dispatch = useDispatch();
 
   const todoItems: TodoModel[] = useSelector((state: RootState) =>
@@ -46,7 +46,7 @@ const ToDoList = () => {
         <TodoItem
           key={item.id}
           id={item.id}
-          complete={item.completed}
+          completed={item.completed}
           text={item.text}
           onToggleClick={onToggleClick}
           onDeleteClick={onDeleteClick}

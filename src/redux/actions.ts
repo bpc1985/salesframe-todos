@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { TodoActionTypes, TodoModel } from "types/types";
 
 import {
@@ -17,9 +16,9 @@ export const loadTodos = (responseData: TodoModel[]): TodoActionTypes => {
   };
 };
 
-export const addTodo = (value: string): TodoActionTypes => ({
+export const addTodo = (id: string, value: string): TodoActionTypes => ({
   type: ADD_TODO,
-  nextId: uuidv4(),
+  id,
   value,
 });
 
