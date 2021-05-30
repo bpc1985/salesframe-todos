@@ -22,8 +22,7 @@ export interface LoadTodosAction {
 
 export interface AddTodoAction {
   type: typeof ADD_TODO;
-  id: string;
-  value: string;
+  newTodo: TodoModel;
 }
 
 export interface EditTodoAction {

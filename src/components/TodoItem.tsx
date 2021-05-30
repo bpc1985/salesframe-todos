@@ -1,7 +1,6 @@
-import { FC, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { editTodo } from "redux/actions";
+import { FC, useState } from "react";
 import { updateApiTodo, deleteApiTodo } from "api/api";
+import { TodoModel } from "types/types";
 
 import "./TodoItem.scss";
 import "./Input.scss";
@@ -10,34 +9,30 @@ export interface ITodoItem {
   id: string;
   text: string;
   completed: boolean;
-  onToggleClick: (id: string) => void;
-  onDeleteClick: (id: string) => void;
+  onEditItem: (id: string, newValue: string) => void;
+  onToggleItem: (id: string) => void;
+  onDeleteItem: (id: string) => void;
 }
 
 export const TodoItem: FC<ITodoItem> = ({
   id,
   text,
   completed,
-  onToggleClick,
-  onDeleteClick,
+  onEditItem,
+  onToggleItem,
+  onDeleteItem,
 }: ITodoItem) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newText, setNewText] = useState<string>(text);
-
-  const dispatch = useDispatch();
-
-  const onEditItem = useCallback(
-    (newValue: string) => dispatch(editTodo(id, newValue)),
-    [dispatch, id]
-  );
 
   const updateTodoHandler = async (
     e: React.KeyboardEvent<HTMLInputElement> & { target: HTMLInputElement }
   ) => {
     if (e.key === "Enter") {
       if (newText && newText.trim().length > 0) {
-        await updateApiTodo({ id, text: newText, completed });
-        onEditItem(newText);
+        const updatedTodo: TodoModel = { id, text: newText, completed };
+        await updateApiTodo(updatedTodo);
+        onEditItem(id, newText);
       } else {
         setNewText(text);
       }
@@ -46,13 +41,14 @@ export const TodoItem: FC<ITodoItem> = ({
   };
 
   const toggleTodoHandler = async (id: string) => {
-    await updateApiTodo({ id, text, completed: !completed });
-    onToggleClick(id);
+    const updatedTodo: TodoModel = { id, text: newText, completed: !completed };
+    await updateApiTodo(updatedTodo);
+    onToggleItem(id);
   };
 
   const deleteTodoHandler = async (id: string) => {
     await deleteApiTodo(id);
-    onDeleteClick(id);
+    onDeleteItem(id);
   };
 
   return (

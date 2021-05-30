@@ -1,6 +1,5 @@
 import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 import { addApiTodo } from "api/api";
 import { addTodo } from "redux/actions";
 
@@ -10,10 +9,9 @@ const Input: FC = () => {
   const dispatch = useDispatch();
 
   const onAddItem = useCallback(
-    async (item: string) => {
-      const id: string = uuidv4();
-      await addApiTodo({ id, text: item, completed: false });
-      dispatch(addTodo(id, item));
+    async (text: string) => {
+      const newTodo = await addApiTodo(text);
+      return dispatch(addTodo(newTodo));
     },
     [dispatch]
   );

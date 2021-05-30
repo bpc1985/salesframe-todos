@@ -9,17 +9,14 @@ import {
   SET_FILTER,
 } from "./constants";
 
-export const loadTodos = (responseData: TodoModel[]): TodoActionTypes => {
-  return {
-    type: LOAD_TODOS,
-    responseData,
-  };
-};
+export const loadTodos = (responseData: TodoModel[]): TodoActionTypes => ({
+  type: LOAD_TODOS,
+  responseData,
+});
 
-export const addTodo = (id: string, value: string): TodoActionTypes => ({
+export const addTodo = (newTodo: TodoModel): TodoActionTypes => ({
   type: ADD_TODO,
-  id,
-  value,
+  newTodo,
 });
 
 export const editTodo = (id: string, newValue: string): TodoActionTypes => ({

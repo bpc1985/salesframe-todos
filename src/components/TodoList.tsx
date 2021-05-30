@@ -2,7 +2,7 @@ import { FC, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { FILTER_ALL, FILTER_ACTIVE, FILTER_COMPLETE } from "redux/constants";
-import { toggleTodo, deleteTodo } from "redux/actions";
+import { editTodo, toggleTodo, deleteTodo } from "redux/actions";
 import { TodoModel, RootState } from "types/types";
 
 import { TodoItem } from "./TodoItem";
@@ -30,12 +30,17 @@ const ToDoList: FC = () => {
     getVisibleTodos(state.todoItems, state.visibilityFilter)
   );
 
-  const onToggleClick = useCallback(
+  const onEditItem = useCallback(
+    (id: string, newValue: string) => dispatch(editTodo(id, newValue)),
+    [dispatch]
+  );
+
+  const onToggleItem = useCallback(
     (id: string) => dispatch(toggleTodo(id)),
     [dispatch]
   );
 
-  const onDeleteClick = useCallback(
+  const onDeleteItem = useCallback(
     (id: string) => dispatch(deleteTodo(id)),
     [dispatch]
   );
@@ -48,8 +53,9 @@ const ToDoList: FC = () => {
           id={item.id}
           completed={item.completed}
           text={item.text}
-          onToggleClick={onToggleClick}
-          onDeleteClick={onDeleteClick}
+          onEditItem={onEditItem}
+          onToggleItem={onToggleItem}
+          onDeleteItem={onDeleteItem}
         />
       ))}
     </div>

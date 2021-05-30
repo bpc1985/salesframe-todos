@@ -19,10 +19,7 @@ const todoItems = (
       return action.responseData;
 
     case ADD_TODO:
-      return [
-        ...state,
-        { id: action.id, text: action.value, completed: false },
-      ];
+      return [...state, { ...action.newTodo }];
 
     case EDIT_TODO:
       return state.map((todo: TodoModel) =>

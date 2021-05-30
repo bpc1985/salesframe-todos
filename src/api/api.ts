@@ -13,24 +13,31 @@ interface TodosResponse {
   data: TodoModel[];
 }
 
+interface AddTodoResponse {
+  result: boolean;
+  data: TodoModel;
+}
+
 export async function loadApiTodos(): Promise<TodoModel[]> {
   const response = await axios.get<TodosResponse>(`${baseUrl}/getTodos`);
   return response.data.data;
 }
 
-export async function addApiTodo(data: TodoModel): Promise<TodoModel[]> {
-  const response = await axios.post<TodosResponse>(
+export async function addApiTodo(text: string): Promise<TodoModel> {
+  const response = await axios.post<AddTodoResponse>(
     `${baseUrl}/addTodo`,
-    data,
+    { text },
     headers
   );
   return response.data.data;
 }
 
-export async function updateApiTodo(data: TodoModel): Promise<TodoModel[]> {
+export async function updateApiTodo(
+  updatedTodo: TodoModel
+): Promise<TodoModel[]> {
   const response = await axios.post<TodosResponse>(
     `${baseUrl}/editTodo`,
-    data,
+    updatedTodo,
     headers
   );
   return response.data.data;
