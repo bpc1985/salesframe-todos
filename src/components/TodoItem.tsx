@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-import { updateApiTodo, deleteApiTodo } from "api/api";
 import { TodoModel } from "types/types";
 
 import "./TodoItem.scss";
@@ -9,8 +8,8 @@ interface ITodoItem {
   id: string;
   text: string;
   completed: boolean;
-  onEditItem: (id: string, newValue: string) => void;
-  onToggleItem: (id: string) => void;
+  onEditItem: (updatedTodo: TodoModel) => void;
+  onToggleItem: (updatedTodo: TodoModel) => void;
   onDeleteItem: (id: string) => void;
 }
 
@@ -31,8 +30,7 @@ export const TodoItem: FC<ITodoItem> = ({
     if (e.key === "Enter") {
       if (newText && newText.trim().length > 0) {
         const updatedTodo: TodoModel = { id, text: newText, completed };
-        await updateApiTodo(updatedTodo);
-        onEditItem(id, newText);
+        onEditItem(updatedTodo);
       } else {
         setNewText(text);
       }
@@ -42,12 +40,10 @@ export const TodoItem: FC<ITodoItem> = ({
 
   const toggleTodoHandler = async (id: string) => {
     const updatedTodo: TodoModel = { id, text: newText, completed: !completed };
-    await updateApiTodo(updatedTodo);
-    onToggleItem(id);
+    onToggleItem(updatedTodo);
   };
 
   const deleteTodoHandler = async (id: string) => {
-    await deleteApiTodo(id);
     onDeleteItem(id);
   };
 

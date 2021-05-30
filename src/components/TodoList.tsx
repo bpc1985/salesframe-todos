@@ -1,25 +1,22 @@
 import { FC, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { FILTER_ALL, FILTER_ACTIVE, FILTER_COMPLETE } from "redux/constants";
-import { editTodo, toggleTodo, deleteTodo } from "redux/actions";
+import { editTodo, toggleTodo, deleteTodo } from "redux/todoSlice";
+import { VisibilityFilter } from "redux/filterSlice";
 import { TodoModel, RootState } from "types/types";
 
 import { TodoItem } from "./TodoItem";
 
 const getVisibleTodos = (todos: TodoModel[], filter: string): TodoModel[] => {
   switch (filter) {
-    case FILTER_ALL: {
+    case VisibilityFilter.FILTER_ALL:
       return todos;
-    }
-    case FILTER_ACTIVE: {
-      return todos.filter((c: TodoModel) => !c.completed);
-    }
-    case FILTER_COMPLETE: {
-      return todos.filter((c: TodoModel) => c.completed);
-    }
+    case VisibilityFilter.FILTER_COMPLETE:
+      return todos.filter((t) => t.completed);
+    case VisibilityFilter.FILTER_ACTIVE:
+      return todos.filter((t) => !t.completed);
     default:
-      return todos;
+      throw new Error("Unknown filter: " + filter);
   }
 };
 
@@ -27,16 +24,16 @@ const ToDoList: FC = () => {
   const dispatch = useDispatch();
 
   const todoItems: TodoModel[] = useSelector((state: RootState) =>
-    getVisibleTodos(state.todoItems, state.visibilityFilter)
+    getVisibleTodos(state.todos, state.visibilityFilter)
   );
 
   const onEditItem = useCallback(
-    (id: string, newValue: string) => dispatch(editTodo(id, newValue)),
+    (updatedTodo: TodoModel) => dispatch(editTodo(updatedTodo)),
     [dispatch]
   );
 
   const onToggleItem = useCallback(
-    (id: string) => dispatch(toggleTodo(id)),
+    (updatedTodo: TodoModel) => dispatch(toggleTodo(updatedTodo)),
     [dispatch]
   );
 

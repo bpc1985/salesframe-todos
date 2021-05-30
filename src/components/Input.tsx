@@ -1,7 +1,6 @@
 import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { addApiTodo } from "api/api";
-import { addTodo } from "redux/actions";
+import { addTodo } from "redux/todoSlice";
 
 import "./Input.scss";
 
@@ -9,10 +8,7 @@ const Input: FC = () => {
   const dispatch = useDispatch();
 
   const onAddItem = useCallback(
-    async (text: string) => {
-      const newTodo = await addApiTodo(text);
-      return dispatch(addTodo(newTodo));
-    },
+    async (text: string) => dispatch(addTodo(text)),
     [dispatch]
   );
 
