@@ -5,7 +5,7 @@ import { TodoModel } from "types/types";
 import "./TodoItem.scss";
 import "./Input.scss";
 
-export interface ITodoItem {
+interface ITodoItem {
   id: string;
   text: string;
   completed: boolean;
